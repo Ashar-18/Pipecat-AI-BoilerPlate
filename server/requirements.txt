@@ -1,0 +1,19 @@
+pipecat-ai[silero,websocket,google,cartesia,openai,deepgram]
+#pip install git+https://github.com/pipecat-ai/pipecat.git
+fastapi
+uvicorn
+python-dotenv
+loguru
+google-generativeai~=0.8.3
+google
+boto3
+gunicorn
+python-multipart
+sqlalchemy
+alembic
+httpx
+pydantic[email]
+tenacity
+aiofiles
+pytest
+pymysql

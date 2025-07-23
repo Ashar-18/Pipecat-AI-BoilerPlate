@@ -1,0 +1,15 @@
+# Environment variables
+.env
+
+# Python virtual environment
+venv/
+.venv/ # Include if you use .venv as the name for your virtual environment
+
+# Byte-code files
+*.pyc
+__pycache__/
+
+# Editor/IDE specific files (optional, but good practice)
+.vscode/
+.idea/
+*.swp
