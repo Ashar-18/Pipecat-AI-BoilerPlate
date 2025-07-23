@@ -17,3 +17,4 @@ tenacity
 aiofiles
 pytest
 pymysql
+aiomysql

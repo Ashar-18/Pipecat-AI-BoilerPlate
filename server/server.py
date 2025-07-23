@@ -10,7 +10,10 @@ from typing import Any, Dict
 
 import uvicorn
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect, HTTPException
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, EmailStr
+import aiomysql
 from fastapi.middleware.cors import CORSMiddleware
 
 # Load environment variables (for local development)
@@ -41,6 +44,51 @@ app.add_middleware(
 )
 
 # New: Add a simple root route to check if the backend is working
+
+# DB config
+DB_CONFIG = {
+    "host": os.getenv("db_ip"),
+    "port": 3306,
+    "user": os.getenv("user"),  
+    "password": os.getenv("password"),
+    "db": os.getenv("db")
+}
+
+# Request schema
+
+
+class EmailCheckRequest(BaseModel):
+    email: EmailStr
+
+# Response schema
+
+
+class EmailCheckResponse(BaseModel):
+    message: str
+    status: bool
+
+
+@app.post("/check-email", response_model=EmailCheckResponse)
+async def check_email(data: EmailCheckRequest):
+    try:
+        conn = await aiomysql.connect(**DB_CONFIG)
+        async with conn.cursor() as cur:
+            await cur.execute("SELECT 1 FROM users WHERE email=%s LIMIT 1", (data.email,))
+            result = await cur.fetchone()
+        conn.close()
+
+        if result:
+            return {"message": "Email found", "status": True}
+        else:
+            return JSONResponse(status_code=404, content={"message": "Email not found", "status": False})
+
+    except HTTPException as he:
+        # Let FastAPI handle it
+        raise he
+    except Exception as e:
+        print(f"Error checking email: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
 @app.get("/")
 async def read_root():
     """

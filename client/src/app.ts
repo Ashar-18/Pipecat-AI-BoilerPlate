@@ -3,6 +3,7 @@ import {
     RTVIClientOptions,
     RTVIEvent,
 } from "@pipecat-ai/client-js";
+
 import { WebSocketTransport } from "@pipecat-ai/websocket-transport";
 
 class WebsocketClientApp {
@@ -121,8 +122,8 @@ class WebsocketClientApp {
                 params: {
                     // Explicitly setting the backend Heroku URL
                     // This URL should use HTTPS for the initial POST /connect request
-                    baseUrl: "https://ths-pipecat-server-742812f8a26b.herokuapp.com",
-                    endpoints: { connect: `/connect?prompt_type=${promptType}` },
+                    baseUrl: "http://localhost:7860/",
+                    endpoints: { connect: `/connect` },
                 },
                 enableMic: true,
                 enableCam: false,
